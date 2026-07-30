@@ -5,7 +5,6 @@ __pycache__
 .git
 .gitignore
 *.md
-dashboard.py
 credentials.json
 ngrok.exe
 .venv

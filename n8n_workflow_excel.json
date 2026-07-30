@@ -1,0 +1,244 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 0
+            },
+            {
+              "triggerAtHour": 8
+            },
+            {
+              "triggerAtHour": 16
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1936,
+        1296
+      ],
+      "name": "Schedule Trigger",
+      "id": "e585e6df-c9bc-4c53-ae1a-038e82ad0f11"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "API_URL",
+              "value": "http://api:8000"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -1712,
+        1296
+      ],
+      "name": "Configurar Variables",
+      "id": "ce8f5e07-e6cc-4a21-ad21-4f8ef8482259"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.API_URL }}/analizar-precios",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"producto\": \"Raspberry Pi 5\",\n  \"plataformas\": [\"amazon\", \"ebay\", \"mercadolibre\"]\n}",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1504,
+        1296
+      ],
+      "name": "Consultar API",
+      "id": "04a2e357-c89e-45e3-8fb1-da10b26ef7d3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nreturn response.filas.map(f => ({\n  fecha: f.fecha,\n  producto: f.producto,\n  plataforma: f.plataforma,\n  titulo: f.titulo,\n  precio: f.precio,\n  link: f.link\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1280,
+        1296
+      ],
+      "name": "Extraer Filas",
+      "id": "47e68cc1-5189-46a6-ada7-b22498509419"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1332zdWKzP3ormvj-WgWPDhEw6HLy9gkDFPi6OJt4FOc",
+          "mode": "list",
+          "cachedResultName": "price",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1332zdWKzP3ormvj-WgWPDhEw6HLy9gkDFPi6OJt4FOc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1332zdWKzP3ormvj-WgWPDhEw6HLy9gkDFPi6OJt4FOc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "fecha": "={{ $json.fecha }}",
+            "producto": "={{ $json.producto }}",
+            "titulo": "={{ $json.titulo }}",
+            "precio": "={{ $json.precio }}",
+            "link": "={{ $json.link }}",
+            "plataforma": "={{ $json.plataforma }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "producto",
+              "displayName": "producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "plataforma",
+              "displayName": "plataforma",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "titulo",
+              "displayName": "titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "precio",
+              "displayName": "precio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1072,
+        1296
+      ],
+      "id": "c7fb3f5b-a2fb-4ba4-8a4b-35efdb46632c",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LqgF6ZenWsYQsXec",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Configurar Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configurar Variables": {
+      "main": [
+        [
+          {
+            "node": "Consultar API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar API": {
+      "main": [
+        [
+          {
+            "node": "Extraer Filas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Filas": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e4c4d7f25b69bff9189c92a724726dd8c59e54bf227a5b05231810d758ec8bd9"
+  }
+}

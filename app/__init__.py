@@ -1,0 +1,1 @@
+# PricePulse AI - App module

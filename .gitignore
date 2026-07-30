@@ -1,0 +1,17 @@
+.env
+credentials.json
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+ngrok.exe
+node_modules/
+cache/
+test_payload.json
+*.pdf

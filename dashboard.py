@@ -87,7 +87,10 @@ st.markdown("---")
 st.subheader("Precio promedio por plataforma")
 promedios = df.groupby("Plataforma")["Precio"].mean().reset_index()
 if not promedios.empty:
-    st.bar_chart(promedios.set_index("Plataforma"))
+    try:
+        st.bar_chart(promedios.set_index("Plataforma"))
+    except Exception:
+        st.caption("Grafico de promedios no disponible para esta version")
 
 st.markdown("---")
 st.subheader("Precios historicos")
@@ -106,4 +109,14 @@ st.markdown("---")
 st.subheader("Detalle de precios")
 df_display = df.copy()
 df_display["Precio"] = df_display["Precio"].apply(lambda x: formatear_precio(x) if pd.notna(x) else "N/A")
-st.table(df_display)
+df_display["Link"] = df_display["Link"].apply(lambda x: f'<a href="{x}" target="_blank">Abrir</a>' if pd.notna(x) and str(x).startswith("http") else "")
+df_display = df_display.reset_index(drop=True)
+try:
+    st.dataframe(df_display, use_container_width=True, hide_index=True)
+except Exception:
+    html = '<table style="width:100%;font-size:13px">'
+    html += "<tr>" + "".join(f"<th>{c}</th>" for c in df_display.columns) + "</tr>"
+    for _, r in df_display.iterrows():
+        html += "<tr>" + "".join(f"<td>{r[c]}</td>" for c in df_display.columns) + "</tr>"
+    html += "</table>"
+    st.markdown(html, unsafe_allow_html=True)

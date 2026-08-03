@@ -27,7 +27,7 @@ async def analizar(producto: str, plataformas: list, precios_reales: list) -> di
         goal="Extraer precios, calcular minimo, maximo, promedio y detectar anomalias.",
         backstory="Analista numerico especializado en extraer metricas de precios de e-commerce.",
         llm=llm,
-        verbose=False,
+        verbose=True,
         allow_delegation=False
     )
 
@@ -36,7 +36,7 @@ async def analizar(producto: str, plataformas: list, precios_reales: list) -> di
         goal="Estructurar el analisis numerico en secciones claras: metricas, comparativa, anomalias, recomendacion.",
         backstory="Estructurador de informacion que transforma datos crudos en secciones ordenadas.",
         llm=llm,
-        verbose=False,
+        verbose=True,
         allow_delegation=False
     )
 
@@ -45,7 +45,7 @@ async def analizar(producto: str, plataformas: list, precios_reales: list) -> di
         goal="Generar UNICAMENTE un JSON valido sin texto adicional, sin markdown, sin etiquetas codeblock.",
         backstory="Especialista en formato JSON estricto para integracion automatica con APIs.",
         llm=llm,
-        verbose=False,
+        verbose=True,
         allow_delegation=False
     )
 

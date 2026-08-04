@@ -1,7 +1,6 @@
 import streamlit as st
 import httpx
 import pandas as pd
-import json
 import os
 
 st.set_page_config(page_title="PricePulse AI", page_icon="", layout="wide")
